@@ -1,4 +1,4 @@
-name: CI
+name: Deploy test
 
 on:
   push:
@@ -16,5 +16,14 @@ jobs:
     - name: Login to Heroku Container registry
       env: 
         HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
-      run: heroku container:login 
+      run: heroku container:login
+    - name: Build and push
+      env:
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:push -a APPNAME web 
+    - name: Release
+      env: 
+        HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+      run: heroku container:release -a ${{ secrets.APPNAME }} web 
+
 
